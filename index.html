@@ -1,61 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Now Playing</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            overflow: hidden; /* Elakkan scroll bar */
-        }
-        .player, .album-art {
-            margin: 20px 0;
-            white-space: nowrap; /* Kekalkan satu baris */
-            overflow: hidden;
-            width: 100%;
-        }
-        .player h2, .album-art h2 {
-            margin-bottom: 10px;
-        }
-        .scroll {
-            display: inline-block;
-            animation: scroll 10s linear infinite; /* Animasi bergerak */
-        }
-        @keyframes scroll {
-            0% {
-                transform: translateX(100%); /* Bermula dari luar skrin */
-            }
-            100% {
-                transform: translateX(-100%); /* Bergerak ke kiri */
-            }
-        }
-        .album-art img {
-            max-width: 300px;
-            border-radius: 10px;
-            animation: scroll 10s linear infinite; /* Album art juga bergerak */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Playing</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #e83838; /* Warna latar belakang merah */
+      font-family: 'Arial', sans-serif;
+    }
+
+    .player-container {
+      background-color: #1c1c1c;
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      width: 600px;
+    }
+
+    .album-art {
+      margin-right: 20px;
+    }
+
+    .album-art img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .song-info {
+      flex: 1;
+    }
+
+    .song-info h2 {
+      font-size: 24px;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .song-info p {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+
+    .time {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .radio-header {
+      color: #ff0000;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-    <div class="player">
-        <h2>Now Playing:</h2>
-        <div class="scroll">
-            <script src="https://embed.radio.co/embed/s9f71ec2d1/song.js"></script>
-        </div>
-    </div>
-    <div class="album-art">
-        <h2>Album Art:</h2>
-        <div class="scroll">
-            <script src="https://embed.radio.co/embed/s9f71ec2d1/artwork.js"></script>
-        </div>
-    </div>
+
+<div class="player-container">
+  <div class="album-art">
+    <img id="album-art" src="https://via.placeholder.com/100" alt="Album Art">
+  </div>
+  <div class="song-info">
+    <div class="radio-header">STESEN RADIO NOMBOR 1 DI MALAYSIA</div>
+    <h2 id="song-title">Tajuk Lagu</h2>
+    <p id="artist-name">Nama Artis</p>
+    <div class="time">Waktu Tempatan: <span id="current-time">00:00:00</span></div>
+  </div>
+</div>
+
+<script src="https://embed.radio.co/embed/s9f71ec2d1/song.js"></script>
+<script src="https://embed.radio.co/embed/s9f71ec2d1/artwork.js"></script>
+
+<script>
+  // Function untuk update waktu masa sebenar
+  function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString();
+    document.getElementById('current-time').textContent = timeString;
+  }
+
+  setInterval(updateTime, 1000);
+
+  // Update title lagu dan nama artis (guna data dari radio.co)
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('https://embed.radio.co/embed/s9f71ec2d1/song.js')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('song-title').textContent = data.song.title;
+        document.getElementById('artist-name').textContent = data.song.artist;
+      });
+
+    fetch('https://embed.radio.co/embed/s9f71ec2d1/artwork.js')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('album-art').src = data.song.artwork_url;
+      });
+  });
+</script>
+
 </body>
 </html>
