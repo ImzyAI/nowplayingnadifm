@@ -74,8 +74,8 @@
 
 <div class="player-container">
   <div class="song-info">
-    <div class="radio-header">STESEN RADIO NOMBOR 1 DI MALAYSIA</div>
-    <h2 id="song-title"><span class="scrolling-title"></span></h2>
+    <div class="radio-header">NADI FM CITARASA ANDA!</div>
+    <h2 id="song-title"><span class="scrolling-title">Memuatkan...</span></h2>
     <div class="time">Waktu Tempatan: <span id="current-time">00:00:00</span></div>
   </div>
 </div>
@@ -90,20 +90,27 @@
 
   setInterval(updateTime, 1000);
 
-  // Update title lagu (guna data dari radio.co)
-  document.addEventListener('DOMContentLoaded', () => {
-    fetch('https://embed.radio.co/embed/s9f71ec2d1/song.js')
+  // Function untuk fetch data dari radio.co
+  function updateSongInfo() {
+    fetch('https://public.radio.co/stations/s9f71ec2d1/status')
       .then(response => response.json())
       .then(data => {
-        document.querySelector('.scrolling-title').textContent = data.song.title + " - " + data.song.artist;
+        const songTitle = data.current_track.title;
+        const songArtist = data.current_track.artist;
+        document.querySelector('.scrolling-title').textContent = songTitle + " - " + songArtist;
+      })
+      .catch(error => {
+        console.error('Error fetching song data:', error);
+        document.querySelector('.scrolling-title').textContent = "Error memuatkan lagu";
       });
-  });
+  }
+
+  // Fetch data bila page dimuatkan
+  document.addEventListener('DOMContentLoaded', updateSongInfo);
+
+  // Set interval untuk refresh info lagu setiap 30 saat
+  setInterval(updateSongInfo, 30000);
 </script>
 
 </body>
 </html>
-
-
-</body>
-</html>
-
