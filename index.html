@@ -27,6 +27,13 @@
 
     .album-art {
       margin-right: 20px;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #2c2c2c; /* Warna latar belakang placeholder album art */
+      border-radius: 10px;
     }
 
     .album-art img {
@@ -41,21 +48,28 @@
       min-width: 0; /* Supaya teks tidak overflow */
     }
 
+    /* Marquee effect */
     .song-info h2 {
       font-size: 24px;
       margin: 0;
       font-weight: bold;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis; /* Potong teks yang terlalu panjang */
+      text-overflow: ellipsis;
     }
 
-    .song-info p {
-      font-size: 18px;
-      margin: 5px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; /* Potong teks yang terlalu panjang */
+    .scrolling-title {
+      display: inline-block;
+      animation: scroll-left 10s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(-100%);
+      }
     }
 
     .time {
@@ -78,8 +92,7 @@
   </div>
   <div class="song-info">
     <div class="radio-header">STESEN RADIO NOMBOR 1 DI MALAYSIA</div>
-    <h2 id="song-title">Tajuk Lagu</h2>
-    <p id="artist-name">Nama Artis</p>
+    <h2 id="song-title"><span class="scrolling-title">Tajuk Lagu</span></h2>
     <div class="time">Waktu Tempatan: <span id="current-time">00:00:00</span></div>
   </div>
 </div>
@@ -97,13 +110,12 @@
 
   setInterval(updateTime, 1000);
 
-  // Update title lagu dan nama artis (guna data dari radio.co)
+  // Update title lagu (guna data dari radio.co)
   document.addEventListener('DOMContentLoaded', () => {
     fetch('https://embed.radio.co/embed/s9f71ec2d1/song.js')
       .then(response => response.json())
       .then(data => {
-        document.getElementById('song-title').textContent = data.song.title;
-        document.getElementById('artist-name').textContent = data.song.artist;
+        document.querySelector('.scrolling-title').textContent = data.song.title;
       });
 
     fetch('https://embed.radio.co/embed/s9f71ec2d1/artwork.js')
