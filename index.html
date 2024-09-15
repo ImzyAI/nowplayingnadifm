@@ -20,23 +20,10 @@
       padding: 20px;
       border-radius: 15px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
       width: 600px;
-    }
-
-    .album-art {
-      margin-right: 20px;
-      width: 100px;
-      height: 100px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .album-art img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
     }
 
     .song-info {
@@ -51,6 +38,8 @@
       font-weight: bold;
       white-space: nowrap;
       overflow: hidden;
+      width: 100%;
+      text-align: center;
     }
 
     .scrolling-title {
@@ -70,21 +59,20 @@
     .time {
       font-size: 14px;
       margin-top: 10px;
+      text-align: center;
     }
 
     .radio-header {
       color: #ff0000;
       font-size: 14px;
       margin-bottom: 5px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
 <div class="player-container">
-  <div class="album-art">
-    <img id="album-art" src="https://via.placeholder.com/100" alt="Album Art">
-  </div>
   <div class="song-info">
     <div class="radio-header">STESEN RADIO NOMBOR 1 DI MALAYSIA</div>
     <h2 id="song-title"><span class="scrolling-title"></span></h2>
@@ -108,12 +96,6 @@
       .then(response => response.json())
       .then(data => {
         document.querySelector('.scrolling-title').textContent = data.song.title + " - " + data.song.artist;
-      });
-
-    fetch('https://embed.radio.co/embed/s9f71ec2d1/artwork.js')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('album-art').src = data.song.artwork_url;
       });
   });
 </script>
